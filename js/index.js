@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', (e) => {
-    document.querySelector("#github-form").addEventListener,("submit", (e) => {
+    document.querySelector("#github-form").addEventListener("submit", (e) => {
         e.preventDefault()
-        console.log(e.target.search.value) //(document.querySelector("#github-form #search").value)
+        fetchUsers(e.target.search.value) //(document.querySelector("#github-form #search").value)
     })
-    fetchUsers()
     fetchRepos()
     renderProfileCards()
 })
@@ -14,8 +13,9 @@ function fetchUsers(value){
             'Accept': 'application/vnd.github.v3+json'
         }}) 
     .then(response => response.json())
-    .then(json => json.items.forEach(renderProfileCards))
-    
+    .then(json => json.items.forEach((user) => {
+        renderProfileCards(user)
+    }))    
 }
 function fetchRepos(value){
     fetch(`https://api.github.com/users/${value}/repos`, {
@@ -26,16 +26,16 @@ function fetchRepos(value){
     .then(json => console.log(json))
 }
 
-function renderProfileCards(octocat){
+function renderProfileCards(user){
     let divContainer = document.createElement("div");
     let h2Name = document.createElement("h2");
     let divImage = document.createElement("div");
     let aRepo = document.createElement("a")   
 
-    h2Name.textContent = items.login;
+    h2Name.textContent = user.login;
     divContainer.className = 'usercard';
-    divImage.src = items.avatar_url;
-    aRepo.textContent = `Visit ${items.login}'s Github`
+    divImage.src = user.avatar_url;
+    aRepo.textContent = `Visit ${user.login}'s Github`
   
     document.querySelector('#github-container').append(divContainer)
 }
