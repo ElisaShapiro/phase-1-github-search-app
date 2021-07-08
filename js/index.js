@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
         e.preventDefault()
         fetchUsers(e.target.search.value) //(document.querySelector("#github-form #search").value)
     })
-    fetchRepos()
-    renderProfileCards()
-})
+    //fetchRepos()
+    // renderProfileCards()
+
 
 function fetchUsers(value){    
     fetch(`https://api.github.com/search/users?q=${value}`, {
@@ -23,20 +23,27 @@ function fetchRepos(value){
             'Accept': 'application/vnd.github.v3+json'
         }})
     .then(response => response.json())
-    .then(json => console.log(json))
+    .then(json => json.forEach((user) => {
+        renderRepos(user)
+    }))
 }
 
 function renderProfileCards(user){
     let divContainer = document.createElement("div");
     let h2Name = document.createElement("h2");
-    let divImage = document.createElement("div");
+    let imageHere = document.createElement("img")
     let aRepo = document.createElement("a")   
 
     h2Name.textContent = user.login;
     divContainer.className = 'usercard';
-    divImage.src = user.avatar_url;
+    imageHere.src = user.avatar_url;
     aRepo.textContent = `Visit ${user.login}'s Github`
+    aRepo.onClick = fetchRepos(user.login);
   
+    divContainer.append(h2Name, imageHere, aRepo)
     document.querySelector('#github-container').append(divContainer)
 }
- 
+function renderRepos(user){
+    debugger
+}
+})
