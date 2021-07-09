@@ -32,27 +32,32 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
     function renderProfileCards(user){
         let divContainer = document.createElement("div");
+        let divFrame = document.createElement("div");
+        let divImg = document.createElement("div");
         let h2Name = document.createElement("h2");
         let imageHere = document.createElement("img")
         let aRepo = document.createElement("a")   
 
         h2Name.textContent = user.login;
         divContainer.className = 'usercard';
+        divFrame.className = 'usercardframe'
+        divImg.className = 'usercardimage'
         imageHere.src = user.avatar_url;
         aRepo.textContent = `Visit ${user.login}'s Github`
-        
+        aRepo.style.color = 'green'
         aRepo.addEventListener("click", (e) => {
             fetchRepos(user.login)
         });
-    
-        divContainer.append(h2Name, imageHere, aRepo)
+        
+        divImg.append(imageHere)
+        divFrame.append(h2Name, divImg, aRepo)
+        divContainer.append(divFrame)
         document.querySelector('#github-container').append(divContainer)
     }
     function renderRepos(repo){
         let aLink = document.createElement("a")
         aLink.href = repo.url;
         aLink.textContent = repo.name;
-        document.querySelector('#github-container)').append(aLink)
-        //not just link of repo has to have something
+        document.querySelector('#github-container').append(aLink)
     }
 })
